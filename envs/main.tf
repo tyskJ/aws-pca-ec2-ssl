@@ -6,6 +6,7 @@
 # ║ key             │ ../modules/key                    │ invoke Key module.                                                                         ║
 # ║ ec2             │ ../modules/ec2                    │ invoke EC2 module.                                                                         ║
 # ║ route53         │ ../modules/route53                │ invoke Route53 module.                                                                     ║
+# ║ pca             │ ../modules/pca                    │ invoke PCA module.                                                                         ║
 # ╚═════════════════╧═══════════════════════════════════╧════════════════════════════════════════════════════════════════════════════════════════════╝
 
 module "nw" {
@@ -60,4 +61,10 @@ module "route53" {
   vpc_id            = module.nw.vpc_id
   linux_privateip   = module.ec2.linux_privateip
   windows_privateip = module.ec2.windows_privateip
+}
+
+module "pca" {
+  source            = "../modules/pca"
+  issuename_linux   = module.route53.linux_fqdn
+  issuename_windows = module.route53.windows_fqdn
 }
