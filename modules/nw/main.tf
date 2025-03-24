@@ -16,6 +16,16 @@
 # ║ assoc_rtb_pub2                     │ aws_route_table_association                         │ RouteTable Association Subnet.                        ║
 # ║ assoc_rtb_pri1                     │ aws_route_table_association                         │ RouteTable Association Subnet.                        ║
 # ║ assoc_rtb_pri2                     │ aws_route_table_association                         │ RouteTable Association Subnet.                        ║
+# ║ bastion_ec2_sg                     │ aws_security_group                                  │ Security Group for Bastion EC2.                       ║
+# ║ linux_ec2_sg                       │ aws_security_group                                  │ Security Group for Linux EC2.                         ║
+# ║ windows_ec2_sg                     │ aws_security_group                                  │ Security Group for Windows EC2.                       ║
+# ║ bastion_ec2_sg_out1                │ aws_security_group_rule                             │ Egress Rule.                                          ║
+# ║ linux_ec2_sg_out1                  │ aws_security_group_rule                             │ Egress Rule.                                          ║
+# ║ windows_ec2_sg_out1                │ aws_security_group_rule                             │ Egress Rule.                                          ║
+# ║ linux_sg_in1                       │ aws_security_group_rule                             │ Ingress Rule.                                         ║
+# ║ linux_sg_in2                       │ aws_security_group_rule                             │ Ingress Rule.                                         ║
+# ║ windows_sg_in1                     │ aws_security_group_rule                             │ Ingress Rule.                                         ║
+# ║ windows_sg_in2                     │ aws_security_group_rule                             │ Ingress Rule.                                         ║
 # ╚════════════════════════════════════╧═════════════════════════════════════════════════════╧═══════════════════════════════════════════════════════╝
 
 resource "aws_vpc" "vpc" {
@@ -132,4 +142,101 @@ resource "aws_route_table_association" "assoc_rtb_pri1" {
 resource "aws_route_table_association" "assoc_rtb_pri2" {
   subnet_id      = aws_subnet.subnet["private-subnet-c"].id
   route_table_id = aws_route_table.rtb_private.id
+}
+
+resource "aws_security_group" "bastion_ec2_sg" {
+  name        = "bastion-sg"
+  vpc_id      = aws_vpc.vpc.id
+  description = "Bastion EC2 Security Group"
+  tags = {
+    Name = "bastion-sg"
+  }
+}
+
+resource "aws_security_group" "linux_ec2_sg" {
+  name        = "linux-sg"
+  vpc_id      = aws_vpc.vpc.id
+  description = "Linux EC2 Security Group"
+  tags = {
+    Name = "linux-sg"
+  }
+}
+
+resource "aws_security_group" "windows_ec2_sg" {
+  name        = "windows-sg"
+  vpc_id      = aws_vpc.vpc.id
+  description = "Windows EC2 Security Group"
+  tags = {
+    Name = "windows-sg"
+  }
+}
+
+resource "aws_security_group_rule" "bastion_ec2_sg_out1" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  description       = "Unrestricted Outbound Rule."
+  security_group_id = aws_security_group.bastion_ec2_sg.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "linux_ec2_sg_out1" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  description       = "Unrestricted Outbound Rule."
+  security_group_id = aws_security_group.linux_ec2_sg.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "windows_ec2_sg_out1" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  description       = "Unrestricted Outbound Rule."
+  security_group_id = aws_security_group.windows_ec2_sg.id
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "linux_sg_in1" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  description              = "Inbound Rule for HTTP."
+  security_group_id        = aws_security_group.linux_ec2_sg.id
+  source_security_group_id = aws_security_group.bastion_ec2_sg.id
+}
+
+resource "aws_security_group_rule" "linux_sg_in2" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  description              = "Inbound Rule for HTTPS."
+  security_group_id        = aws_security_group.linux_ec2_sg.id
+  source_security_group_id = aws_security_group.bastion_ec2_sg.id
+}
+
+resource "aws_security_group_rule" "windows_sg_in1" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  description              = "Inbound Rule for HTTP."
+  security_group_id        = aws_security_group.windows_ec2_sg.id
+  source_security_group_id = aws_security_group.bastion_ec2_sg.id
+}
+
+resource "aws_security_group_rule" "windows_sg_in2" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  description              = "Inbound Rule for HTTPS."
+  security_group_id        = aws_security_group.windows_ec2_sg.id
+  source_security_group_id = aws_security_group.bastion_ec2_sg.id
 }
