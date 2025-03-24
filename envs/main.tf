@@ -2,6 +2,7 @@
 # ║ PCA EC2 SSL Stack - Terraform main.tf module                                                                                                     ║
 # ╠═════════════════╤═══════════════════════════════════╤════════════════════════════════════════════════════════════════════════════════════════════╣
 # ║ nw              │ ../modules/nw                     │ invoke Network module.                                                                     ║
+# ║ iam             │ ../modules/iam                    │ invoke IAM module.                                                                         ║
 # ╚═════════════════╧═══════════════════════════════════╧════════════════════════════════════════════════════════════════════════════════════════════╝
 
 module "nw" {
@@ -16,4 +17,9 @@ module "nw" {
     ]
   )
   nacl_assoc_list = ["public-subnet-a", "public-subnet-c", "private-subnet-a", "private-subnet-c"]
+}
+
+module "iam" {
+  source    = "../modules/iam"
+  partition = local.partition_name
 }
