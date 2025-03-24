@@ -3,6 +3,7 @@
 # ╠═════════════════╤═══════════════════════════════════╤════════════════════════════════════════════════════════════════════════════════════════════╣
 # ║ nw              │ ../modules/nw                     │ invoke Network module.                                                                     ║
 # ║ iam             │ ../modules/iam                    │ invoke IAM module.                                                                         ║
+# ║ key             │ ../modules/key                    │ invoke Key module.                                                                         ║
 # ╚═════════════════╧═══════════════════════════════════╧════════════════════════════════════════════════════════════════════════════════════════════╝
 
 module "nw" {
@@ -22,4 +23,8 @@ module "nw" {
 module "iam" {
   source    = "../modules/iam"
   partition = local.partition_name
+}
+
+module "key" {
+  source = "../modules/key"
 }
