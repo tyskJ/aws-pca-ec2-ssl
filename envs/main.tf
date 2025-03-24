@@ -4,6 +4,7 @@
 # ║ nw              │ ../modules/nw                     │ invoke Network module.                                                                     ║
 # ║ iam             │ ../modules/iam                    │ invoke IAM module.                                                                         ║
 # ║ key             │ ../modules/key                    │ invoke Key module.                                                                         ║
+# ║ ec2             │ ../modules/ec2                    │ invoke EC2 module.                                                                         ║
 # ╚═════════════════╧═══════════════════════════════════╧════════════════════════════════════════════════════════════════════════════════════════════╝
 
 module "nw" {
@@ -27,4 +28,28 @@ module "iam" {
 
 module "key" {
   source = "../modules/key"
+}
+
+module "ec2" {
+  source               = "../modules/ec2"
+  keypair_name         = module.key.keypair_name
+  instanceprofile_name = module.iam.instanceprofile_name
+  bastion_ec2_map = (
+    {
+      "name" = "bastion-ec2", "instancetype" = "t3.large", "volname" = "ebs-root", "volumesize" = "30",
+      "sgid" = module.nw.sgid_for_bastion, "subnetid" = module.nw.subnetid_for_bastion
+    }
+  )
+  linux_ec2_map = (
+    {
+      "name" = "linux-ec2", "instancetype" = "t3.large", "volname" = "ebs-root", "volumesize" = "30",
+      "sgid" = module.nw.sgid_for_linux, "subnetid" = module.nw.subnetid_for_linux
+    }
+  )
+  windows_ec2_map = (
+    {
+      "name" = "windows-ec2", "instancetype" = "t3.large", "volname" = "ebs-root", "volumesize" = "30",
+      "sgid" = module.nw.sgid_for_windows, "subnetid" = module.nw.subnetid_for_windows
+    }
+  )
 }
