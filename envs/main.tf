@@ -5,6 +5,7 @@
 # ║ iam             │ ../modules/iam                    │ invoke IAM module.                                                                         ║
 # ║ key             │ ../modules/key                    │ invoke Key module.                                                                         ║
 # ║ ec2             │ ../modules/ec2                    │ invoke EC2 module.                                                                         ║
+# ║ route53         │ ../modules/route53                │ invoke Route53 module.                                                                     ║
 # ╚═════════════════╧═══════════════════════════════════╧════════════════════════════════════════════════════════════════════════════════════════════╝
 
 module "nw" {
@@ -52,4 +53,11 @@ module "ec2" {
       "sgid" = module.nw.sgid_for_windows, "subnetid" = module.nw.subnetid_for_windows
     }
   )
+}
+
+module "route53" {
+  source            = "../modules/route53"
+  vpc_id            = module.nw.vpc_id
+  linux_privateip   = module.ec2.linux_privateip
+  windows_privateip = module.ec2.windows_privateip
 }
