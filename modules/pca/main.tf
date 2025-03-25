@@ -5,6 +5,8 @@
 # ║ certificate_for_ca                 │ aws_acmpca_certificate                              │ Certificate For CAs.                                  ║
 # ║ assoc_cert_to_ca                   │ aws_acmpca_certificate_authority_certificate        │ Association Certificate to CAs.                       ║
 # ║ add_permission_to_acm              │ aws_acmpca_permission                               │ Add permission to ACM.                                ║
+# ║ certificate_for_linux              │ aws_acm_certificate                                 │ Certificate For Linux.                                ║
+# ║ certificate_for_windows            │ aws_acm_certificate                                 │ Certificate For Windows.                              ║
 # ╚════════════════════════════════════╧═════════════════════════════════════════════════════╧═══════════════════════════════════════════════════════╝
 
 // Root CA
@@ -50,4 +52,14 @@ resource "aws_acmpca_permission" "add_permission_to_acm" {
   principal                 = "acm.amazonaws.com"
   actions                   = ["IssueCertificate", "GetCertificate", "ListPermissions"]
   source_account            = var.account_id
+}
+
+resource "aws_acm_certificate" "certificate_for_linux" {
+  domain_name               = var.issuename_linux
+  certificate_authority_arn = aws_acmpca_certificate_authority.root_ca.arn
+}
+
+resource "aws_acm_certificate" "certificate_for_windows" {
+  domain_name               = var.issuename_windows
+  certificate_authority_arn = aws_acmpca_certificate_authority.root_ca.arn
 }
