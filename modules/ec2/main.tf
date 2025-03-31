@@ -61,7 +61,7 @@ resource "aws_instance" "linux_instance" {
 }
 
 resource "aws_instance" "windows_instance" {
-  ami                         = data.aws_ssm_parameter.windowsserver_2022.id
+  ami                         = data.aws_ssm_parameter.windowsserver_2022.value
   associate_public_ip_address = true
   iam_instance_profile        = var.instanceprofile_name
   key_name                    = var.keypair_name
