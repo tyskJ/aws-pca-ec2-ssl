@@ -38,19 +38,19 @@ module "ec2" {
   instanceprofile_name = module.iam.instanceprofile_name
   bastion_ec2_map = (
     {
-      "name" = "bastion-ec2", "instancetype" = "t3.large", "volname" = "ebs-root", "volumesize" = "30",
+      "name" = "bastion-ec2", "instancetype" = "t3.large", "volname" = "ebs-root", "volumesize" = "30", "publicip" = true,
       "sgid" = module.nw.sgid_for_bastion, "subnetid" = module.nw.subnetid_for_bastion
     }
   )
   linux_ec2_map = (
     {
-      "name" = "linux-ec2", "instancetype" = "t3.large", "volname" = "ebs-root", "volumesize" = "30",
+      "name" = "linux-ec2", "instancetype" = "t3.large", "volname" = "ebs-root", "volumesize" = "30", "publicip" = false,
       "sgid" = module.nw.sgid_for_linux, "subnetid" = module.nw.subnetid_for_linux
     }
   )
   windows_ec2_map = (
     {
-      "name" = "windows-ec2", "instancetype" = "t3.large", "volname" = "ebs-root", "volumesize" = "30",
+      "name" = "windows-ec2", "instancetype" = "t3.large", "volname" = "ebs-root", "volumesize" = "30", "publicip" = false,
       "sgid" = module.nw.sgid_for_windows, "subnetid" = module.nw.subnetid_for_windows
     }
   )

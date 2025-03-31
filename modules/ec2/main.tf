@@ -8,7 +8,7 @@
 
 resource "aws_instance" "bastion_instance" {
   ami                         = data.aws_ssm_parameter.windowsserver_2022.value
-  associate_public_ip_address = true
+  associate_public_ip_address = var.bastion_ec2_map.publicip
   iam_instance_profile        = var.instanceprofile_name
   key_name                    = var.keypair_name
   instance_type               = var.bastion_ec2_map.instancetype
@@ -35,7 +35,7 @@ resource "aws_instance" "bastion_instance" {
 
 resource "aws_instance" "linux_instance" {
   ami                         = data.aws_ssm_parameter.amazonlinux_2023.value
-  associate_public_ip_address = true
+  associate_public_ip_address = var.linux_ec2_map.publicip
   iam_instance_profile        = var.instanceprofile_name
   key_name                    = var.keypair_name
   instance_type               = var.linux_ec2_map.instancetype
@@ -62,7 +62,7 @@ resource "aws_instance" "linux_instance" {
 
 resource "aws_instance" "windows_instance" {
   ami                         = data.aws_ssm_parameter.windowsserver_2022.value
-  associate_public_ip_address = true
+  associate_public_ip_address = var.windows_ec2_map.publicip
   iam_instance_profile        = var.instanceprofile_name
   key_name                    = var.keypair_name
   instance_type               = var.windows_ec2_map.instancetype
