@@ -63,9 +63,9 @@ module "route53" {
   windows_privateip = module.ec2.windows_privateip
 }
 
-# module "pca" {
-#   source            = "../modules/pca"
-#   account_id        = local.account_id
-#   issuename_linux   = module.route53.linux_fqdn
-#   issuename_windows = module.route53.windows_fqdn
-# }
+module "pca" {
+  source            = "../modules/pca"
+  account_id        = local.account_id
+  issuename_linux   = module.route53.linux_fqdn
+  issuename_windows = module.route53.windows_fqdn
+}

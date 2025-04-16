@@ -12,7 +12,7 @@
 // Root CA
 resource "aws_acmpca_certificate_authority" "root_ca" {
   type                            = "ROOT"
-  usage_mode                      = "SHORT_LIVED_CERTIFICATE"
+  usage_mode                      = "GENERAL_PURPOSE"
   permanent_deletion_time_in_days = 7
   key_storage_security_standard   = "FIPS_140_2_LEVEL_3_OR_HIGHER"
   tags = {
@@ -35,7 +35,7 @@ resource "aws_acmpca_certificate" "certificate_for_ca" {
   signing_algorithm           = "SHA256WITHRSA"
   validity {
     type  = "YEARS"
-    value = 1
+    value = 2
   }
   template_arn = "arn:aws:acm-pca:::template/RootCACertificate/V1"
 }
